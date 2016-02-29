@@ -29,10 +29,13 @@ from shadowsocks import shell, daemon, eventloop, tcprelay, udprelay, \
 
 
 def main():
+    # 检查python状态
     shell.check_python()
 
+    #获取配置文件
     config = shell.get_config(False)
 
+    # 信号量相关,作用未知
     daemon.daemon_exec(config)
 
     if config['port_password']:
@@ -58,6 +61,7 @@ def main():
     tcp_servers = []
     udp_servers = []
 
+    # dns 默认为8.8.8.8,8.8.4.4
     if 'dns_server' in config:  # allow override settings in resolv.conf
         dns_resolver = asyncdns.DNSResolver(config['dns_server'])
     else:

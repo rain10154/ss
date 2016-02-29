@@ -89,7 +89,7 @@ def freopen(f, mode, stream):
     os.close(newfd)
     os.dup2(oldfd, newfd)
 
-
+# server start or local start
 def daemon_start(pid_file, log_file):
 
     def handle_exit(signum, _):

@@ -31,7 +31,7 @@ VERBOSE_LEVEL = 5
 
 verbose = 0
 
-
+# 检查python
 def check_python():
     info = sys.version_info
     if info[0] == 2 and not info[1] >= 6:
@@ -124,7 +124,7 @@ def check_config(config, is_local):
 
     encrypt.try_cipher(config['password'], config['method'])
 
-
+# 解析参数
 def get_config(is_local):
     global verbose
 
@@ -327,7 +327,7 @@ General options:
   --pid-file PID_FILE    pid file for daemon mode
   --log-file LOG_FILE    log file for daemon mode
   --user USER            username to run as
-  -v, -vv                verbose mode
+  -v, -vv                verbose mode日志等级
   -q, -qq                quiet mode, only show warnings/errors
   --version              show version information
 
