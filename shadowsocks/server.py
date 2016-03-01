@@ -28,12 +28,12 @@ from shadowsocks import shell, daemon, eventloop, tcprelay, udprelay, \
     asyncdns, manager
 
 
-def main():
+def server_start(config):
     # 检查python状态
-    shell.check_python()
+    #shell.check_python()
 
     #获取配置文件
-    config = shell.get_config(False)
+    #config = shell.get_config(False)
 
     # 信号量相关,作用未知
     daemon.daemon_exec(config)
@@ -143,5 +143,5 @@ def main():
         run_server()
 
 
-if __name__ == '__main__':
-    main()
+#if __name__ == '__main__':
+ #   main()
