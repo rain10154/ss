@@ -1,20 +1,28 @@
 # -*- coding: UTF-8 -*-
+import threading
+
 from flask import Flask,jsonify
 
 from shadowsocks import User as user
-from shadowsocks import server
+from shadowsocks import server, task
 from shadowsocks.common import to_bytes, to_str, IPNetwork
 from shadowsocks.shell import check_config
 import logging
 import sys
+import thread
+import time
 
 app = Flask(__name__)
+
+#全局变量
+config = {}
 
 
 @app.route('/addUser', methods=['GET'])
 def addUser():
     newUser = user.User()
     (newName, newPassword) = newUser.addUser()
+    
     return jsonify({'name':newName,'password':newPassword})
 
 
@@ -26,8 +34,6 @@ def addTestUser():
 
 
 def getSimpleConfig():
-    config = {}
-
     VERBOSE_LEVEL = 5
     config['password'] = to_bytes(config.get('password', b''))
     config['method'] = to_str(config.get('method', 'aes-256-cfb'))
@@ -59,10 +65,43 @@ def getSimpleConfig():
     check_config(config, False)
     return config
 
+def timer_start():
+    t = threading.Timer(5, test_func, ("msg1", "msg2"))
+    t.start()
+
+def test_func(msg1,msg2):
+    print "I'm test_func,",msg1,msg2
+    print ssDict
+    timer_start()
+
+userDict = {}
+ssDict = {}
 
 if __name__ == '__main__':
-    userDict = {}
-    ssDict = {}
+    class myThread (threading.Thread):   #继承父类threading.Thread
+        def __init__(self, threadID, name, counter):
+            threading.Thread.__init__(self)
+            self.threadID = threadID
+            self.name = name
+            self.counter = counter
+
+        def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数
+            self.taskLoad()
+
+        def taskLoad(self):
+            timer_start()
+            while True:
+                time.sleep(1)
+
+    class serverThread (threading.Thread):   #继承父类threading.Thread
+        def __init__(self, threadID, name, counter):
+            threading.Thread.__init__(self)
+            self.threadID = threadID
+            self.name = name
+            self.counter = counter
+        def run(self):                   #把要执行的代码写到run函数里面 线程在创建后会直接运行run函数
+            config = getSimpleConfig()
+            server.server_start(config)
 
     try:
         userFile = open(user.fileName, "r")
@@ -81,7 +120,13 @@ if __name__ == '__main__':
     newUser = user.User()
     newUser.userDict = userDict
 
-    config = getSimpleConfig()
-    server.server_start(config)
+    thread1 = myThread(1, "Thread-1", 1)
+    thread1.start()
+
+    thread2 = myThread(2, "Thread-2", 1)
+    thread2.start()
 
     app.run(port=10000,debug=True)
+
+
+

@@ -39,6 +39,7 @@ class User(Singleton):
             f.write(newName + ',' + newPassword + ',' + str(time) + '\n')
 
         self.userDict[newName] = value
+        self.ssDict[newName] = newPassword
         return (newName, newPassword)
 
     def generateNewUser(self):

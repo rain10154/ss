@@ -22,10 +22,12 @@ import sys
 import os
 import logging
 import signal
+import threading
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../'))
 from shadowsocks import shell, daemon, eventloop, tcprelay, udprelay, \
     asyncdns, manager
+
 
 
 def server_start(config):
