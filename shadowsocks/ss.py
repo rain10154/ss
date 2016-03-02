@@ -4,7 +4,7 @@ import threading
 from flask import Flask,jsonify
 
 from shadowsocks import User as user
-from shadowsocks import server, task
+from shadowsocks import server
 from shadowsocks.common import to_bytes, to_str, IPNetwork
 from shadowsocks.shell import check_config
 import logging
